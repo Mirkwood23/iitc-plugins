@@ -2,7 +2,7 @@
 // @id             iitc-plugin-s2-zl@ab
 // @name           IITC plugin: Show Zoom Level S2 Grid
 // @category       Layer
-// @version        0.1.0.20180208.300000
+// @version        0.1.0.20180208.310000
 // @namespace      https://github.com/jonatkins/ingress-intel-total-conversion
 // @description    Drop a Zoom Level S2 Grid on the intel map
 // @include        https://www.ingress.com/intel*
@@ -20,9 +20,16 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
 
 // PLUGIN START ////////////////////////////////////////////////////////
 
+var nZoomDelta = 0;
 
 // use own namespace for plugin
 window.plugin.l10s2grid = function() {};
+
+window.plugin.l10s2grid.toggle  = function() {
+    nZoomDelta =  1 - nZoomDelta;
+    $("#iitc-plugin-zoomLevel").background = "#fff000";
+    window.plugin.l10s2grid.update();
+};
 
 window.plugin.l10s2grid.setup  = function() {
   /// S2 Geometry functions
@@ -58,6 +65,7 @@ $('#updatestatus').append('<div title="Map Zoom Level" id="iitc-plugin-zoomLevel
       .prop('type', 'text/css')
       .html('#iitc-plugin-zoomLevel {align:right; height:15px; width:30px; bottom:0; padding:4px; position:fixed; right:0; z-index:3003; background:#eecc00; color:#666666};')
       .appendTo('head');
+    $('#iitc-plugin-zoomLevel').click(window.plugin.l10s2grid.toggle);
 
     window.addHook('mapDataEntityInject', function() {
       $("#iitc-plugin-zoomLevel").html('z' + map.getZoom());
@@ -464,7 +472,7 @@ window.plugin.l10s2grid.update = function() {
 
   // centre cell
   var zoom = map.getZoom();
-  cellSize = zoom;
+  cellSize = zoom - nZoomDelta;
   if (zoom >= 5) {
     //var cellSize = zoom>=7 ? 8 : 4;
     var cell = S2.S2Cell.FromLatLng ( map.getCenter(), cellSize );
