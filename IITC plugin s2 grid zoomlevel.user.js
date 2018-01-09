@@ -2,13 +2,13 @@
 // @id             iitc-plugin-s2-zl@ab
 // @name           IITC plugin: Show Zoom Level S2 Grid
 // @category       Layer
-// @version        0.1.0.20180208.310000
+// @version        0.1.0.20180208.320000
 // @namespace      https://github.com/jonatkins/ingress-intel-total-conversion
 // @description    Drop a Zoom Level S2 Grid on the intel map
-// @include        https://www.ingress.com/intel*
-// @include        http://www.ingress.com/intel*
-// @match          https://www.ingress.com/intel*
-// @match          http://www.ingress.com/intel*
+// @include        https://*.ingress.com/intel*
+// @include        http://*.ingress.com/intel*
+// @match          https://*.ingress.com/intel*
+// @match          http://*.ingress.com/intel*
 // @grant          none
 // ==/UserScript==
 
