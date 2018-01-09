@@ -2,7 +2,7 @@
 // @id             iitc-plugin-s2-zl@ab
 // @name           IITC plugin: Show Zoom Level S2 Grid
 // @category       Layer
-// @version        0.1.0.20180208.320000
+// @version        0.1.1.20180109.000000
 // @namespace      https://github.com/jonatkins/ingress-intel-total-conversion
 // @description    Drop a Zoom Level S2 Grid on the intel map
 // @include        https://*.ingress.com/intel*
@@ -27,7 +27,6 @@ window.plugin.l10s2grid = function() {};
 
 window.plugin.l10s2grid.toggle  = function() {
     nZoomDelta =  1 - nZoomDelta;
-    $("#iitc-plugin-zoomLevel").background = "#fff000";
     window.plugin.l10s2grid.update();
 };
 
@@ -60,10 +59,10 @@ window.plugin.l10s2grid.setup  = function() {
 
 window.S2 = {};
 
-$('#updatestatus').append('<div title="Map Zoom Level" id="iitc-plugin-zoomLevel">z</div>');
+$('#updatestatus').append('<div title="Map Zoom Level. \n Click to zoom in/out S2 Grid layer." id="iitc-plugin-zoomLevel">z</div>');
     $('<style>')
       .prop('type', 'text/css')
-      .html('#iitc-plugin-zoomLevel {align:right; height:15px; width:30px; bottom:0; padding:4px; position:fixed; right:0; z-index:3003; background:#eecc00; color:#666666};')
+      .html('#iitc-plugin-zoomLevel {align:right; height:15px; width:30px; bottom:0; padding:4px; position:fixed; right:0; z-index:3003; background:#eecc00; color:#746267};')
       .appendTo('head');
     $('#iitc-plugin-zoomLevel').click(window.plugin.l10s2grid.toggle);
 
