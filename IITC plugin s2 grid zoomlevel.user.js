@@ -2,7 +2,7 @@
 // @id             iitc-plugin-s2-zl@ab
 // @name           IITC plugin: Show Zoom Level S2 Grid
 // @category       Layer
-// @version        0.1.1.20180109.000000
+// @version        0.1.1.20180111.000000
 // @namespace      https://github.com/jonatkins/ingress-intel-total-conversion
 // @description    Drop a Zoom Level S2 Grid on the intel map
 // @include        https://*.ingress.com/intel*
@@ -20,13 +20,20 @@ if(typeof window.plugin !== 'function') window.plugin = function() {};
 
 // PLUGIN START ////////////////////////////////////////////////////////
 
-var nZoomDelta = 0;
+var nZoomLocked = 0;
 
 // use own namespace for plugin
 window.plugin.l10s2grid = function() {};
 
 window.plugin.l10s2grid.toggle  = function() {
-    nZoomDelta =  1 - nZoomDelta;
+    if (nZoomLocked == 0) {
+        nZoomLocked = map.getZoom();
+        $("#iitc-plugin-zoomLevel").css("background","Red");
+    }  else {
+        nZoomLocked =0;
+        $("#iitc-plugin-zoomLevel").css("background","Yellow");
+
+    }
     window.plugin.l10s2grid.update();
 };
 
@@ -59,10 +66,10 @@ window.plugin.l10s2grid.setup  = function() {
 
 window.S2 = {};
 
-$('#updatestatus').append('<div title="Map Zoom Level. \n Click to zoom in/out S2 Grid layer." id="iitc-plugin-zoomLevel">z</div>');
+$('#updatestatus').append('<div title="Map Zoom Level. \n Click to lock/unlock S2 Grid level." id="iitc-plugin-zoomLevel">z</div>');
     $('<style>')
       .prop('type', 'text/css')
-      .html('#iitc-plugin-zoomLevel {align:right; height:15px; width:30px; bottom:0; padding:4px; position:fixed; right:0; z-index:3003; background:#eecc00; color:#746267};')
+      .html('#iitc-plugin-zoomLevel {align:right; height:15px; width:30px; bottom:0; padding:4px; position:fixed; right:0; z-index:3003; background:Yellow; color:#746267};')
       .appendTo('head');
     $('#iitc-plugin-zoomLevel').click(window.plugin.l10s2grid.toggle);
 
@@ -471,7 +478,11 @@ window.plugin.l10s2grid.update = function() {
 
   // centre cell
   var zoom = map.getZoom();
-  cellSize = zoom - nZoomDelta;
+  if (nZoomLocked == 0) {
+      cellSize = zoom;
+  }  else {
+        cellSize = nZoomLocked;
+    }
   if (zoom >= 5) {
     //var cellSize = zoom>=7 ? 8 : 4;
     var cell = S2.S2Cell.FromLatLng ( map.getCenter(), cellSize );
@@ -525,7 +536,7 @@ window.plugin.l10s2grid.drawCell = function(cell) {
   // the level 6 cells have noticible errors with non-geodesic lines - and the larger level 4 cells are worse
   // NOTE: we only draw two of the edges. as we draw all cells on screen, the other two edges will either be drawn
   // from the other cell, or be off screen so we don't care
-  var region = L.geodesicPolyline([corners[0],corners[1],corners[2]], {fill: false, color: color, opacity: 0.5, weight: 5, clickable: false });
+  var region = L.geodesicPolyline([corners[0],corners[1],corners[2]], {fill: false, color: color, opacity: 0.5, weight: 2, clickable: false });
 
   window.plugin.l10s2grid.regionLayer.addLayer(region);
 
